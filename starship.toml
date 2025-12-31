@@ -1,131 +1,214 @@
-# @path: ~/.config/starship.toml
+# @path: ~/.config/starship/starship.toml
 # @author: redskaber
+# Modern, clean, and multi-language optimized
+
+
 format = """
-[ ](bold white)$hostname$kubernetes$directory$git_branch$git_commit$git_state$git_status$docker_context$package$golang$helm$java$cmake$julia$kotlin$lua$nim$nodejs$python$ruby$rust$swift$terraform$aws$gcloud$azure $battery               
-[ ❯ ](bold green)"""
+$username$hostname$kubernetes$directory$git_branch$git_commit$git_state$git_status\
+$docker_context$package$c$rust$golang$nodejs$python$lua$nix_shell$terraform$aws$gcloud$azure\
+$battery$time$status
+[ ❯ ](bold green)
+"""
 
-[aws]
-symbol = "  "
+# ———————— 全局样式 ————————
+palette = "catppuccin_mocha"
 
-[buf]
-symbol = " "
+[line_break]
+disabled = false
 
-[c]
-symbol = " "
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold yellow)"
 
-[conda]
-symbol = " "
+[status]
+disabled = false
+style = "bold red"
+format = "[$symbol$common_meaning$signal_name$maybe_int]($style) "
+symbol = "✗ "
+recognize_signal_names = true
+map_symbol = true
 
-[dart]
-symbol = " "
+[time]
+disabled = false
+format = "[$time]($style) "
+time_format = "%R"  # HH:MM
+style = "bold dimmed"
 
-[directory]
-read_only = " "
-truncation_length = 7
-truncation_symbol = "…/"
+# ———————— 用户 & 主机 ————————
+[username]
+style_user = "blue bold"
+style_root = "red bold"
+format = "[$user]($style)@ "
+disabled = false
+show_always = true
 
 [hostname]
 ssh_only = false
-format = '[$hostname]($style) '
+format = "[$hostname]($style) "
 style = "blue bold"
 trim_at = "."
 disabled = false
 
-[username]
-style_user = "blue bold"
-style_root = "red bold"
-format = "[$user]($style) "
-disabled = false
-show_always = true
-
-[docker_context]
-symbol = " "
-
-[elixir]
-symbol = " "
-
-[elm]
-symbol = " "
+# ———————— 路径 & Git ————————
+[directory]
+truncation_length = 5
+truncation_symbol = "…/"
+read_only = " "
+style = "cyan bold"
 
 [git_branch]
 symbol = " "
+style = "bold purple"
+format = "[$symbol$branch]($style) "
+
+[git_commit]
+commit_hash_length = 7
+style = "dimmed green"
+format = "([$hash]($style)) "
 
 [git_status]
-ahead = "⇡🏎💨${count}"
-diverged = "⇕⇡😵${ahead_count}⇣${behind_count}"
-behind = "⇣😰${count}"
-conflicted = "🏳 "
-untracked = "🤷"
-stashed = "📦"
-modified = "📝"
-staged = '[++\($count\)](green)'
-renamed = "👅"
-deleted ="🗑 "
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕${ahead_count}⇣${behind_count}"
+conflicted = "⚠️ "
+untracked = "? "
+stashed = "📦 "
+modified = "! "
+staged = "+${count}"
+renamed = "» "
+deleted = "✘ "
+style = "bold red"
+format = "([$all_status$ahead_behind]($style)) "
 
-[golang]
-symbol = " "
-
-[haskell]
-symbol = " "
-
-[hg_branch]
-symbol = " "
-
-[java]
-symbol = " "
-
-[julia]
-symbol = " "
-
-[lua]
-symbol = " "
-
-[memory_usage]
-symbol = " "
-
-[meson]
-symbol = "喝 "
-
-[nim]
-symbol = " "
-
-[nix_shell]
-symbol = " "
-
-[nodejs]
-symbol = " "
-
-[package]
-symbol = " "
-
-[python]
-symbol = " "
-
-[rlang]
-symbol = "ﳒ "
-
-[ruby]
-symbol = " "
+# ———————— 语言 & 工具链 ————————
+[c]
+symbol = " "
+style = "blue"
+format = "[$symbol($version)]($style) "
 
 [rust]
 symbol = " "
+style = "red"
+format = "[$symbol($version)]($style) "
+
+[golang]
+symbol = " "
+style = "cyan"
+format = "[$symbol($version)]($style) "
+
+[nodejs]
+symbol = " "
+style = "green"
+format = "[$symbol($version)]($style) "
+
+[python]
+symbol = " "
+style = "yellow"
+pyenv_version_name = true
+format = "[$symbol($version)]($style) "
+
+[lua]
+symbol = " "
+style = "blue"
+format = "[$symbol($version)]($style) "
+
+[nix_shell]
+symbol = " "
+style = "blue"
+format = "[$symbol($name)]($style) "
+
+[package]
+symbol = " "
+style = "dimmed white"
+format = "[$symbol$version]($style) "
+
+# ———————— 容器 & 云 ————————
+[docker_context]
+symbol = " "
+style = "blue"
+format = "[$symbol$context]($style) "
+
+[kubernetes]
+symbol = "☸ "
+style = "cyan"
+format = "[$symbol$cluster/$namespace]($style) "
+
+[aws]
+symbol = " "
+style = "yellow"
+format = "[$symbol$profile]($style) "
+
+[gcloud]
+symbol = "󰜀 "
+style = "blue"
+format = "[$symbol$project]($style) "
+
+[azure]
+symbol = "󰠅 "
+style = "blue"
+format = "[$symbol$subscription]($style) "
+
+# ———————— 构建 & 包管理 ————————
+[cmake]
+symbol = " "
+style = "blue"
+format = "[$symbol($version)]($style) "
+
+[meson]
+symbol = "喝 "
+style = "green"
+format = "[$symbol($version)]($style) "
+
+[nim]
+symbol = " "
+style = "yellow"
+format = "[$symbol($version)]($style) "
+
+[julia]
+symbol = " "
+style = "purple"
+format = "[$symbol($version)]($style) "
 
 [scala]
 symbol = " "
+style = "red"
+format = "[$symbol($version)]($style) "
 
-[spack]
-symbol = "🅢 "
+[haskell]
+symbol = " "
+style = "purple"
+format = "[$symbol($version)]($style) "
 
+[elixir]
+symbol = " "
+style = "magenta"
+format = "[$symbol($version)]($style) "
+
+[elm]
+symbol = " "
+style = "blue"
+format = "[$symbol($version)]($style) "
+
+[buf]
+symbol = " "
+style = "white"
+format = "[$symbol($version)]($style) "
+
+# ———————— 系统状态 ————————
 [battery]
 full_symbol = "🔋"
-charging_symbol = "🔌 "
-discharging_symbol = "⚡️"
+charging_symbol = "🔌"
+discharging_symbol = "⚡"
+unknown_symbol = "❓"
+empty_symbol = "🪫"
+format = "[$symbol$percentage]($style) "
 
-[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+[[battery.display]]
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+[[battery.display]]
 threshold = 30
 style = "bold yellow"
 
@@ -133,4 +216,18 @@ style = "bold yellow"
 threshold = 100
 style = "bold green"
 
+[memory_usage]
+disabled = true  # 可选开启，但通常不必要
+
+# ———————— 性能优化 ————————
+[cmd_duration]
+min_time = 2000
+format = "took [$duration]($style) "
+style = "yellow"
+
+[custom.dotfiles]
+command = "echo ''"
+when = "test -d ~/.dotfiles"
+style = "dimmed green"
+format = "[$output]($style) "
 
