@@ -99,9 +99,9 @@ find . -maxdepth 3 \
 '''
 command = '''
 if command -v clang++ >/dev/null 2>&1; then
-    clang++ --version | head -n1 | awk '{print \\$1, \\$NF}' | sed 's/(.*//g'
+    clang++ --version | head -n1 | awk "{print \\$1, \\$3}"
 elif command -v g++ >/dev/null 2>&1; then
-    g++ --version | head -n1 | awk '{print \\$1, \\$NF}' | sed 's/(.*//g'
+    g++ --version | head -n1 | awk "{print \\$1, \\$3}"
 else
     echo "C++"
 fi
