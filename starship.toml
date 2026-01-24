@@ -87,7 +87,6 @@ format = "([$all_status$ahead_behind]($style)) "
 symbol = " "
 style = "blue bold"
 format = "[$symbol($output)]($style) "
-shell = ["sh", "-c"]
 detect_extensions = ["cpp", "cc", "cxx", "hpp", "hxx"]
 description = "C++ compiler version"
 
