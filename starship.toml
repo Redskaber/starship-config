@@ -108,42 +108,24 @@ style = "bold red"
 format = "([$all_status$ahead_behind]($style)) "
 
 # ———————— C++ (custom.cpp) ————————
-# [custom.cpp]
-# when = '''
-# test -n "$( \
-# find . -maxdepth 3 \
-#   \( \
-#   -name "*.cpp" -o \
-#   -name "*.cc"  -o \
-#   -name "*.cxx" -o \
-#   -name "*.hpp" -o \
-#   -name "*.hxx"    \
-#   \) \
-#   -print -quit     \
-# )"
-# '''
-# command = '''
-# if command -v clang++ >/dev/null 2>&1; then
-#     clang++ --version | head -n1 | awk "{print \\$1, \\$3}"
-# elif command -v g++ >/dev/null 2>&1; then
-#     g++ --version | head -n1 | awk "{print \\$1, \\$3}"
-# else
-#     echo "C++"
-# fi
-# '''
-# symbol = " "
-# style = "blue bold"
-# format = "[$symbol($output)]($style) "
-# description = "C++ compiler version"
-# shell = ["sh", "-c"]
-# disabled = false
-# detect_extensions = ["cpp", "hpp"]
-
 [custom.cpp]
+command = '''
+if command -v clang++ >/dev/null 2>&1; then
+    clang++ --version | head -n1 | awk "{print \$1, \$3}"
+elif command -v g++ >/dev/null 2>&1; then
+    g++ --version | head -n1 | awk "{print \$1, \$3}"
+else
+    echo "C++"
+fi
+'''
+
 symbol = " "
-style = "bg:#282C34 fg:#98C379"
-format = "[$symbol]($style)"
-detect_extensions = ["cpp", "hpp"]
+style = "blue bold"
+format = "[$symbol($output)]($style) "
+description = "C++ compiler version"
+shell = ["sh", "-c"]
+detect_extensions = ['cpp', 'cxx', 'cc', 'hpp']
+
 
 # ———————— 语言 & 工具链 ————————
 [c]
