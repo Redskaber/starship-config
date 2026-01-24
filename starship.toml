@@ -6,7 +6,7 @@
 
 format = """
 $username$hostname$kubernetes$directory$git_branch$git_commit$git_state$git_status\
-$docker_context$package$c$custom.cpp$rust$zig$golang$nodejs$bun$deno$python$lua$java$dotnet$ruby$php$r$swift$nix_shell$terraform$aws$gcloud$azure\
+$docker_context$package$c$cmake$custom.cpp$rust$zig$golang$nodejs$bun$deno$python$lua$java$dotnet$ruby$php$r$swift$nix_shell$terraform$aws$gcloud$azure\
 $battery$time$status
 [ ❯ ](bold green)
 """
@@ -82,17 +82,32 @@ deleted = "✘ "
 style = "bold red"
 format = "([$all_status$ahead_behind]($style)) "
 
+# ———————— C++ (custom.cpp) ————————
+[custom.cpp]
+when = '''
+test -n "$(find . -maxdepth 1 -name "*.cpp" -o -name "*.cc" -o -name "*.cxx" -o -name "*.h" -o -name "*.hpp" -o -name "*.hxx" -print -quit)"
+'''
+command = '''
+if command -v g++ >/dev/null 2>&1; then
+    g++ --version | head -n1 | awk '{print $1, $NF}' | sed 's/clang version/clang/; s/g++/g++/'
+elif command -v clang++ >/dev/null 2>&1; then
+    clang++ --version | head -n1 | awk '{print $1, $NF}' | sed 's/clang version/clang/'
+else
+    exit 1
+fi
+'''
+symbol = " "
+style = "blue bold"
+format = "[$symbol($output)]($style) "
+description = "C++ compiler version"
+shell = ["/bin/sh", "-c"]
+disabled = false
+
 # ———————— 语言 & 工具链 ————————
 [c]
 symbol = " "
 style = "blue"
 format = "[$symbol($version)]($style) "
-
-[custom.cpp]
-command = "printf ' '"
-when = 'test -n "$(find . -maxdepth 3 -name "*.cpp" -o -name "*.cc" -o -name "*.cxx" -o -name "*.hpp" -o -name "*.hh" -o -name "CMakeLists.txt" -o -name "meson.build" -o -name "conanfile.*" -o -name "vcpkg.json" -o -name "compile_commands.json" -print -quit 2>/dev/null)"'
-style = "blue"
-format = "[$output]($style) "
 
 [dotnet]
 symbol = "󰌪 "
@@ -171,7 +186,7 @@ style = "green"
 format = "[$symbol($version)]($style) "
 
 [package]
-symbol = " "
+symbol = " "
 style = "dimmed white"
 format = "[$symbol$version]($style) "
 
@@ -206,6 +221,7 @@ format = "[$symbol$subscription]($style) "
 symbol = " "
 style = "blue"
 format = "[$symbol($version)]($style) "
+detect_files = ["CMakeLists.txt", "CMakeCache.txt"]
 
 [meson]
 symbol = "喝 "
@@ -246,6 +262,52 @@ format = "[$symbol($version)]($style) "
 symbol = " "
 style = "white"
 format = "[$symbol($version)]($style) "
+
+# ———————— 系统符号 ————————
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
 
 # ———————— 系统状态 ————————
 [battery]
