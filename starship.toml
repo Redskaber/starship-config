@@ -84,19 +84,6 @@ format = "([$all_status$ahead_behind]($style)) "
 
 # ———————— C++ (custom.cpp) ————————
 [custom.cpp]
-when = '''
-test -n "$( \
-find . -maxdepth 3 \
-  \( \
-  -name "*.cpp" -o \
-  -name "*.cc"  -o \
-  -name "*.cxx" -o \
-  -name "*.hpp" -o \
-  -name "*.hxx"    \
-  \) \
-  -print -quit     \
-)"
-'''
 command = '''
 if command -v clang++ >/dev/null 2>&1; then
     clang++ --version | head -n1 | awk "{print \\$1, \\$3}"
@@ -109,9 +96,11 @@ fi
 symbol = " "
 style = "blue bold"
 format = "[$symbol($output)]($style) "
-description = "C++ compiler version"
 shell = ["sh", "-c"]
 disabled = false
+detect_extensions = ["cpp", "cc", "cxx", "hpp", "hxx"]
+description = "C++ compiler version"
+
 
 # ———————— 语言 & 工具链 ————————
 [c]
@@ -159,6 +148,26 @@ format = "[$symbol($version)]($style) "
 symbol = " "
 style = "blue"
 format = "[$symbol($version)]($style) "
+
+[crystal]
+symbol = " "
+style = "bg:#282C34 fg:#98C379"
+format = "[$symbol]($style)"
+
+[dart]
+symbol = " "
+style = "bg:#282C34 fg:#98C379"
+format = "[$symbol]($style)"
+
+[julia]
+symbol = " "
+style = "bg:#282C34 fg:#98C379"
+format = "[$symbol]($style)"
+
+[kotlin]
+symbol = " "
+style = "bg:#282C34 fg:#98C379"
+format = "[$symbol]($style)"
 
 [nix_shell]
 symbol = " "
