@@ -1,11 +1,12 @@
 # @path: ~/.config/starship/starship.toml
 # @author: redskaber
+# @timedate: 2026-01-24
 # Modern, clean, and multi-language optimized
 
 
 format = """
 $username$hostname$kubernetes$directory$git_branch$git_commit$git_state$git_status\
-$docker_context$package$c$rust$golang$nodejs$python$lua$nix_shell$terraform$aws$gcloud$azure\
+$docker_context$package$c$custom.cpp$rust$zig$golang$nodejs$bun$deno$python$lua$java$dotnet$ruby$php$r$swift$nix_shell$terraform$aws$gcloud$azure\
 $battery$time$status
 [ ❯ ](bold green)
 """
@@ -87,19 +88,40 @@ symbol = " "
 style = "blue"
 format = "[$symbol($version)]($style) "
 
+[custom.cpp]
+command = "echo ' '"
+when = """bash -c '[[ -n "$(find . -maxdepth 2 \$  -name "*.cpp" -o -name "*.hpp" -o -name "CMakeLists.txt" \$   -print -quit 2>/dev/null)" ]]'"""
+style = "blue"
+format = "[$output]($style) "
+
+[dotnet]
+symbol = "󰌪 "
+style = "blue"
+format = "[$symbol($version)]($style) "
+
 [rust]
 symbol = " "
 style = "red"
 format = "[$symbol($version)]($style) "
 
+[zig]
+symbol = "↯ "
+style = "yellow"
+format = "[$symbol($version)]($style) "
+
+[java]
+symbol = " "
+style = "red"
+format = "[$symbol($version)]($style) "
+
+[ruby]
+symbol = " "
+style = "magenta"
+format = "[$symbol($version)]($style) "
+
 [golang]
 symbol = " "
 style = "cyan"
-format = "[$symbol($version)]($style) "
-
-[nodejs]
-symbol = " "
-style = "green"
 format = "[$symbol($version)]($style) "
 
 [python]
@@ -117,6 +139,36 @@ format = "[$symbol($version)]($style) "
 symbol = " "
 style = "blue"
 format = "[$symbol($name)]($style) "
+
+[php]
+symbol = " "
+style = "blue"
+format = "[$symbol($version)]($style) "
+
+[r]
+symbol = "ﳒ "
+style = "blue"
+format = "[$symbol($version)]($style) "
+
+[swift]
+symbol = "󰛥 "
+style = "orange"
+format = "[$symbol($version)]($style) "
+
+[deno]
+symbol = " "
+style = "yellow"
+format = "[$symbol($version)]($style) "
+
+[bun]
+symbol = "🍞 "
+style = "orange"
+format = "[$symbol($version)]($style) "
+
+[nodejs]
+symbol = " "
+style = "green"
+format = "[$symbol($version)]($style) "
 
 [package]
 symbol = " "
@@ -226,7 +278,7 @@ format = "took [$duration]($style) "
 style = "yellow"
 
 [custom.dotfiles]
-command = "echo ''"
+command = "echo ' '"
 when = "test -d ~/.dotfiles"
 style = "dimmed green"
 format = "[$output]($style) "
