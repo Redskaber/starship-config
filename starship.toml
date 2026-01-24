@@ -3,42 +3,107 @@
 # @timedate: 2026-01-24
 # Modern, clean, and multi-language optimized
 
-
+# $username\
+# $hostname\
 format = """
-$username$hostname$kubernetes$directory\
-$git_branch$git_commit$git_state$git_status\
+$localip\
+$shlvl\
+$singularity\
+$kubernetes\
+$directory\
+$vcsh\
+$fossil_branch\
+$fossil_metrics\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+$hg_state\
+$pijul_channel\
 $docker_context\
 $package\
 ${custom.dotfiles}\
+${custom.cpp}\
+${custom.r}\
 $c\
 $cmake\
-${custom.cpp}\
-$rust\
-$zig\
-$golang\
-$nodejs\
-$bun\
+$cobol\
+$daml\
+$dart\
 $deno\
-$python\
-$lua\
-$java\
 $dotnet\
-$ruby\
+$elixir\
+$elm\
+$erlang\
+$fennel\
+$fortran\
+$gleam\
+$golang\
+$guix_shell\
+$haskell\
+$haxe\
+$helm\
+$java\
+$julia\
+$kotlin\
+$gradle\
+$lua\
+$nim\
+$nodejs\
+$ocaml\
+$opa\
+$perl\
 $php\
-$r\
+$pulumi\
+$purescript\
+$python\
+$quarto\
+$raku\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$solidity\
 $swift\
-$nix_shell\
 $terraform\
+$typst\
+$vlang\
+$vagrant\
+$zig\
+$buf\
+$nix_shell\
+$conda\
+$meson\
+$spack\
+$memory_usage\
 $aws\
 $gcloud\
+$openstack\
 $azure\
-$battery$time$status
-[ ❯ ](bold green)
+$nats\
+$direnv\
+$env_var\
+$mise\
+$crystal\
+$sudo\
+$cmd_duration\
+$line_break\
+$jobs\
+$battery\
+$time\
+$status\
+$os\
+$container\
+$netns\
+$shell\
+$character
 """
 
-# ———————— 全局样式 ————————
-palette = "catppuccin_mocha"
 
+# ———————— 全局样式 ————————
 [line_break]
 disabled = false
 
@@ -52,34 +117,28 @@ disabled = false
 style = "bold red"
 format = "[$symbol$common_meaning$signal_name$maybe_int]($style) "
 symbol = "✗ "
-recognize_signal_names = true
+recognize_signal_code = true
 map_symbol = true
-
-[time]
-disabled = false
-format = "[$time]($style) "
-time_format = "%R"  # HH:MM
-style = "bold dimmed"
 
 # ———————— 用户 & 主机 ————————
 [username]
 style_user = "blue bold"
 style_root = "red bold"
-format = "[$user]($style)@ "
+format = "[$user]($style)"
 disabled = false
 show_always = true
 
 [hostname]
 ssh_only = false
-format = "[$hostname]($style) "
+format = "[$hostname]($style)"
 style = "blue bold"
 trim_at = "."
 disabled = false
 
 # ———————— 路径 & Git ————————
 [directory]
-truncation_length = 5
-truncation_symbol = "…/"
+truncation_length = 2
+truncation_symbol = ""
 read_only = " "
 style = "cyan bold"
 
@@ -109,183 +168,199 @@ format = "([$all_status$ahead_behind]($style)) "
 
 # ———————— C++ (custom.cpp) ————————
 [custom.cpp]
-# command = '''
-# if command -v clang++ >/dev/null 2>&1; then
-#     clang++ --version | head -n1 | awk "{print \$1, \$3}"
-# elif command -v g++ >/dev/null 2>&1; then
-#     g++ --version | head -n1 | awk "{print \$1, \$3}"
-# else
-#     echo "C++"
-# fi
-# '''
-command = 'echo clang'
+when = '''
+test -n "$( \
+find . -maxdepth 3 \
+  \( \
+  -name "*.cpp" -o \
+  -name "*.cc"  -o \
+  -name "*.cxx" -o \
+  -name "*.hpp" -o \
+  -name "*.hxx"    \
+  \) \
+  -print -quit     \
+)"
+'''
+command = '''
+if command -v clang++ >/dev/null 2>&1; then
+    clang++ --version | head -n1 | sed 's/(.*$//' | awk '{print  $1"++ "$NF}'
+elif command -v g++ >/dev/null 2>&1; then
+    g++ --version | head -n1 | sed 's/(.*$//' | awk '{print  $1" "$NF}'
+else
+    echo "C++"
+fi
+'''
 symbol = " "
 style = "blue bold"
-format = "[$symbol($output)]($style) "
-# description = "C++ compiler version"
-# shell = ["sh", "-c"]
+format = "via [$symbol ($output)]($style) "
 detect_extensions = ['cpp', 'cxx', 'cc', 'hpp']
+
+[custom.dotfiles]
+command = "echo ' '"
+when = "test -d ~/.dotfiles"
+style = "dimmed green"
+format = "via [$output]($style) "
 
 
 # ———————— 语言 & 工具链 ————————
 [c]
 symbol = " "
 style = "blue"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [dotnet]
 symbol = "󰌪 "
 style = "blue"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [rust]
 symbol = " "
 style = "red"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [zig]
 symbol = "↯ "
 style = "yellow"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [java]
 symbol = " "
 style = "red"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [ruby]
 symbol = " "
 style = "magenta"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [golang]
 symbol = " "
 style = "cyan"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [python]
 symbol = " "
 style = "yellow"
 pyenv_version_name = true
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [lua]
 symbol = " "
 style = "blue"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [nix_shell]
 symbol = " "
 style = "blue"
-format = "[$symbol($name)]($style) "
+format = 'via [$symbol $state \(($name)\)]($style) '
 
 [php]
 symbol = " "
 style = "blue"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
-[r]
+[custom.r]
 symbol = "ﳒ "
 style = "blue"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [swift]
 symbol = "󰛥 "
 style = "orange"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [deno]
 symbol = " "
 style = "yellow"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [bun]
 symbol = "🍞 "
 style = "orange"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [nodejs]
 symbol = " "
 style = "green"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [package]
 symbol = " "
 style = "dimmed white"
-format = "[$symbol$version]($style) "
+format = "via [$symbol ($version)]($style) "
 
 # ———————— 容器 & 云 ————————
 [docker_context]
 symbol = " "
 style = "blue"
-format = "[$symbol$context]($style) "
+format = "con [$symbol $context]($style) "
 
 [kubernetes]
 symbol = "☸ "
 style = "cyan"
-format = "[$symbol$cluster/$namespace]($style) "
+format = "con [$symbol $cluster/$namespace]($style) "
 
 [aws]
 symbol = " "
 style = "yellow"
-format = "[$symbol$profile]($style) "
+format = "con [$symbol $profile]($style) "
 
 [gcloud]
 symbol = "󰜀 "
 style = "blue"
-format = "[$symbol$project]($style) "
+format = "con [$symbol $project]($style) "
 
 [azure]
 symbol = "󰠅 "
 style = "blue"
-format = "[$symbol$subscription]($style) "
+format = "con [$symbol $subscription]($style) "
 
 # ———————— 构建 & 包管理 ————————
 [cmake]
 symbol = " "
 style = "blue"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 detect_files = ["CMakeLists.txt", "CMakeCache.txt"]
 
 [meson]
 symbol = "喝 "
 style = "green"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [nim]
 symbol = " "
 style = "yellow"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [julia]
 symbol = " "
 style = "purple"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [scala]
 symbol = " "
 style = "red"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [haskell]
 symbol = " "
 style = "purple"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [elixir]
 symbol = " "
 style = "magenta"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [elm]
 symbol = " "
 style = "blue"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 [buf]
 symbol = " "
 style = "white"
-format = "[$symbol($version)]($style) "
+format = "via [$symbol ($version)]($style) "
 
 # ———————— 系统符号 ————————
 [os.symbols]
@@ -333,39 +408,10 @@ Unknown = " "
 Void = " "
 Windows = "󰍲 "
 
-# ———————— 系统状态 ————————
-[battery]
-full_symbol = "🔋"
-charging_symbol = "🔌"
-discharging_symbol = "⚡"
-unknown_symbol = "❓"
-empty_symbol = "🪫"
-format = "[$symbol$percentage]($style) "
-
-[[battery.display]]
-threshold = 10
-style = "bold red"
-
-[[battery.display]]
-threshold = 30
-style = "bold yellow"
-
-[[battery.display]]
-threshold = 100
-style = "bold green"
-
-[memory_usage]
-disabled = true  # 可选开启，但通常不必要
-
 # ———————— 性能优化 ————————
 [cmd_duration]
 min_time = 2000
 format = "took [$duration]($style) "
 style = "yellow"
 
-[custom.dotfiles]
-command = "echo ' '"
-when = "test -d ~/.dotfiles"
-style = "dimmed green"
-format = "[$output]($style) "
 
