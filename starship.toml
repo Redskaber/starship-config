@@ -98,24 +98,19 @@ find . -maxdepth 3 \
 )"
 '''
 command = '''
-  detect_compiler() {
-    if type clang++ >/dev/null 2>&1; then
-      ver=$(clang++ --version 2>/dev/null | head -1)
-      echo "$ver" | sed 's/^clang version/clang++/; s/ (.*)//; s/ version//'
-    elif type g++ >/dev/null 2>&1; then
-      ver=$(g++ --version 2>/dev/null | head -1)
-      echo "$ver" | awk '{print $1, $NF}'
-    else
-      echo "C++"
-    fi
-  }
-  detect_compiler
+if command -v clang++ >/dev/null 2>&1; then
+    clang++ --version | head -n1 | sed 's/(.*$//' | awk '{print  $1" "$NF}'
+elif command -v g++ >/dev/null 2>&1; then
+    g++ --version | head -n1 | sed 's/(.*$//' | awk '{print  $1" "$NF}'
+else
+    echo "C++"
+fi
 '''
 symbol = " "
 style = "blue bold"
 format = "[$symbol($output)]($style) "
 description = "C++ compiler version"
-shell = ["/bin/sh", "-c"]
+shell = ["sh", "-c"]
 disabled = false
 
 # ———————— 语言 & 工具链 ————————
