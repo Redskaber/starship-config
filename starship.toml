@@ -86,9 +86,8 @@ format = "([$all_status$ahead_behind]($style)) "
 [custom.cpp]
 symbol = " "
 style = "blue bold"
-format = "[$symbol($output)]($style) "
+format = "[$symbol($version)]($style) "
 detect_extensions = ["cpp", "cc", "cxx", "hpp", "hxx"]
-description = "C++ compiler version"
 
 # ———————— 语言 & 工具链 ————————
 [c]
