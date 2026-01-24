@@ -85,16 +85,24 @@ format = "([$all_status$ahead_behind]($style)) "
 # ———————— C++ (custom.cpp) ————————
 [custom.cpp]
 when = '''
-test -n "$(find . -maxdepth 1 -name "*.cpp" -o -name "*.cc" -o -name "*.cxx" -o -name "*.h" -o -name "*.hpp" -o -name "*.hxx" -print -quit)"
+  if find . -maxdepth 3 -name "*.cpp" -o -name "*.cc" | head -1 | grep -q .; then
+    exit 0
+  fi
+  exit 1
 '''
 command = '''
-if command -v g++ >/dev/null 2>&1; then
-    g++ --version | head -n1 | awk '{print $1, $NF}' | sed 's/clang version/clang/; s/g++/g++/'
-elif command -v clang++ >/dev/null 2>&1; then
-    clang++ --version | head -n1 | awk '{print $1, $NF}' | sed 's/clang version/clang/'
-else
-    exit 1
-fi
+  detect_compiler() {
+    if type clang++ >/dev/null 2>&1; then
+      ver=$(clang++ --version 2>/dev/null | head -1)
+      echo "$ver" | sed 's/^clang version/clang++/; s/ (.*)//; s/ version//'
+    elif type g++ >/dev/null 2>&1; then
+      ver=$(g++ --version 2>/dev/null | head -1)
+      echo "$ver" | awk '{print $1, $NF}'
+    else
+      echo "C++"
+    fi
+  }
+  detect_compiler
 '''
 symbol = " "
 style = "blue bold"
