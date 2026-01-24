@@ -85,10 +85,17 @@ format = "([$all_status$ahead_behind]($style)) "
 # ———————— C++ (custom.cpp) ————————
 [custom.cpp]
 when = '''
-  if find . -maxdepth 3 -name "*.cpp" -o -name "*.cc" | head -1 | grep -q .; then
-    exit 0
-  fi
-  exit 1
+test -n "$( \
+find . -maxdepth 3 \
+  \( \
+  -name "*.cpp" -o \
+  -name "*.cc"  -o \
+  -name "*.cxx" -o \
+  -name "*.hpp" -o \
+  -name "*.hxx"    \
+  \) \
+  -print -quit     \
+)"
 '''
 command = '''
   detect_compiler() {
