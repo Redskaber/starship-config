@@ -90,7 +90,7 @@ format = "[$symbol($version)]($style) "
 
 [custom.cpp]
 command = "echo ' '"
-when = """bash -c '[[ -n "$(find . -maxdepth 2 \$  -name "*.cpp" -o -name "*.hpp" -o -name "CMakeLists.txt" \$   -print -quit 2>/dev/null)" ]]'"""
+when = 'test -n "$(find . -maxdepth 3 -name "*.cpp" -o -name "*.cc" -o -name "*.cxx" -o -name "*.hpp" -o -name "*.hh" -o -name "CMakeLists.txt" -o -name "meson.build" -o -name "conanfile.*" -o -name "vcpkg.json" -o -name "compile_commands.json" -print -quit 2>/dev/null)"'
 style = "blue"
 format = "[$output]($style) "
 
