@@ -3,6 +3,7 @@
 # @timedate: 2026-01-24
 # Modern, clean, and multi-language optimized
 
+# $os\
 # $username\
 # $hostname\
 format = """
@@ -95,13 +96,63 @@ $jobs\
 $battery\
 $time\
 $status\
-$os\
 $container\
 $netns\
 $shell\
 $character
 """
 
+# ———————— 系统符号 ————————
+[os]
+style = "bold blue"
+format = "[$symbol]($style) "
+disabled = false
+
+# ———————— 系统符号 ————————
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
 
 # ———————— 全局样式 ————————
 [line_break]
@@ -112,28 +163,28 @@ success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
 vimcmd_symbol = "[❮](bold yellow)"
 
-[status]
-disabled = false
-style = "bold red"
-format = "[$symbol$common_meaning$signal_name$maybe_int]($style) "
-symbol = "✗ "
-recognize_signal_code = true
-map_symbol = true
+# [status]
+# disabled = false
+# style = "bold red"
+# format = "[$symbol$common_meaning$signal_name$maybe_int]($style) "
+# symbol = "✗ "
+# recognize_signal_code = true
+# map_symbol = true
 
 # ———————— 用户 & 主机 ————————
-[username]
-style_user = "blue bold"
-style_root = "red bold"
-format = "[$user]($style)"
-disabled = false
-show_always = true
-
-[hostname]
-ssh_only = false
-format = "[$hostname]($style)"
-style = "blue bold"
-trim_at = "."
-disabled = false
+# [username]
+# style_user = "blue bold"
+# style_root = "red bold"
+# format = "[$user]($style)"
+# disabled = false
+# show_always = true
+#
+# [hostname]
+# ssh_only = false
+# format = "[$hostname]($style)"
+# style = "blue bold"
+# trim_at = "."
+# disabled = false
 
 # ———————— 路径 & Git ————————
 [directory]
@@ -151,43 +202,47 @@ format = "[$symbol$branch]($style) "
 commit_hash_length = 7
 style = "dimmed green"
 format = "([$hash]($style)) "
+only_detached = true
 
 [git_status]
 ahead = "⇡${count}"
 behind = "⇣${count}"
 diverged = "⇕${ahead_count}⇣${behind_count}"
-conflicted = "⚠️ "
+conflicted = "↔ "
 untracked = "? "
-stashed = "📦 "
+stashed = " "
 modified = "! "
-staged = "+${count}"
+staged = "+ "
 renamed = "» "
 deleted = "✘ "
 style = "bold red"
 format = "([$all_status$ahead_behind]($style)) "
+disabled = false
+ignore_submodules = true
 
 # ———————— C++ (custom.cpp) ————————
 [custom.cpp]
-when = '''
-test -n "$( \
-find . -maxdepth 3 \
-  \( \
-  -name "*.cpp" -o \
-  -name "*.cc"  -o \
-  -name "*.cxx" -o \
-  -name "*.hpp" -o \
-  -name "*.hxx"    \
-  \) \
-  -print -quit     \
-)"
-'''
+# used detect_extensions
+# when = ''' 
+# test -n "$( \
+# find . -maxdepth 3 \
+#   \( \
+#   -name "*.cpp" -o \
+#   -name "*.cc"  -o \
+#   -name "*.cxx" -o \
+#   -name "*.hpp" -o \
+#   -name "*.hxx"    \
+#   \) \
+#   -print -quit     \
+# )"
+# '''
 command = '''
 if command -v clang++ >/dev/null 2>&1; then
     clang++ --version | head -n1 | sed 's/(.*$//' | awk '{print  $1"++ "$NF}'
 elif command -v g++ >/dev/null 2>&1; then
     g++ --version | head -n1 | sed 's/(.*$//' | awk '{print  $1" "$NF}'
 else
-    echo "C++"
+    echo "NonCompiler"
 fi
 '''
 symbol = " "
@@ -196,11 +251,16 @@ format = "via [$symbol ($output)]($style) "
 detect_extensions = ['cpp', 'cxx', 'cc', 'hpp']
 
 [custom.dotfiles]
+# when = "test -d ~/.dotfiles"
 command = "echo ' '"
-when = "test -d ~/.dotfiles"
 style = "dimmed green"
 format = "via [$output]($style) "
+detect_extensions = ['dotfiles']
 
+[custom.r]
+symbol = "ﳒ "
+style = "blue"
+format = "via [$symbol ($version)]($style) "
 
 # ———————— 语言 & 工具链 ————————
 [c]
@@ -252,15 +312,10 @@ format = "via [$symbol ($version)]($style) "
 [nix_shell]
 symbol = " "
 style = "blue"
-format = 'via [$symbol $state \(($name)\)]($style) '
+format = 'via [$symbol $state \($name\)]($style) '
 
 [php]
 symbol = " "
-style = "blue"
-format = "via [$symbol ($version)]($style) "
-
-[custom.r]
-symbol = "ﳒ "
 style = "blue"
 format = "via [$symbol ($version)]($style) "
 
@@ -275,7 +330,7 @@ style = "yellow"
 format = "via [$symbol ($version)]($style) "
 
 [bun]
-symbol = "🍞 "
+symbol = "󰛦 "
 style = "orange"
 format = "via [$symbol ($version)]($style) "
 
@@ -323,7 +378,7 @@ format = "via [$symbol ($version)]($style) "
 detect_files = ["CMakeLists.txt", "CMakeCache.txt"]
 
 [meson]
-symbol = "喝 "
+symbol = " "
 style = "green"
 format = "via [$symbol ($version)]($style) "
 
@@ -361,52 +416,6 @@ format = "via [$symbol ($version)]($style) "
 symbol = " "
 style = "white"
 format = "via [$symbol ($version)]($style) "
-
-# ———————— 系统符号 ————————
-[os.symbols]
-Alpaquita = " "
-Alpine = " "
-AlmaLinux = " "
-Amazon = " "
-Android = " "
-Arch = " "
-Artix = " "
-CentOS = " "
-Debian = " "
-DragonFly = " "
-Emscripten = " "
-EndeavourOS = " "
-Fedora = " "
-FreeBSD = " "
-Garuda = "󰛓 "
-Gentoo = " "
-HardenedBSD = "󰞌 "
-Illumos = "󰈸 "
-Kali = " "
-Linux = " "
-Mabox = " "
-Macos = " "
-Manjaro = " "
-Mariner = " "
-MidnightBSD = " "
-Mint = " "
-NetBSD = " "
-NixOS = " "
-OpenBSD = "󰈺 "
-openSUSE = " "
-OracleLinux = "󰌷 "
-Pop = " "
-Raspbian = " "
-Redhat = " "
-RedHatEnterprise = " "
-RockyLinux = " "
-Redox = "󰀘 "
-Solus = "󰠳 "
-SUSE = " "
-Ubuntu = " "
-Unknown = " "
-Void = " "
-Windows = "󰍲 "
 
 # ———————— 性能优化 ————————
 [cmd_duration]
